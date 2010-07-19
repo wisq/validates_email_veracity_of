@@ -29,8 +29,11 @@ class ValidatesEmailVeracityOfTest < Test::Unit::TestCase
   end
 
   def test_email_address_with_mx_lookup_only
-    real_addresses.each do |email|
+    real_addresses_with_mx.each do |email|
       assert EmailMxOnly.new(:address => email).valid?, 'Should validate.'
+    end
+    real_addresses_without_mx.each do |email|
+      assert !EmailMxOnly.new(:address => email).valid?, 'Should not validate.'
     end
   end
 

@@ -70,11 +70,18 @@ class Test::Unit::TestCase #:nodoc:
       'your_father_smells@of-elder-berr.ies']
     end
     
+    def real_addresses_without_mx
+      ['itsme@heycarsten.com']
+    end
+    
+    def real_addresses_with_mx
+      ['steve@apple.com',
+      'pete@unspace.ca',
+      'heycarsten@gmail.com']
+    end
+    
     def real_addresses
-      %w[ itsme@heycarsten.com
-      steve@apple.com
-      pete@unspace.ca
-      heycarsten@gmail.com ]
+      real_addresses_with_mx + real_addresses_without_mx
     end
   
 end
