@@ -113,7 +113,7 @@ class ValidatesEmailVeracityOf #:nodoc:
                 'address'  => Resolv::DNS::Resource::IN::A}.fetch(record.to_s.downcase)
 
         Timeout::timeout(@options.fetch(:timeout, 2)) do
-          Resolv::DNS.open do |dns|
+          Resolv::DNS.open(resolv_config) do |dns|
             dns.getresources(name, type).collect do |s|
               s.send(record).to_s
             end
@@ -122,6 +122,14 @@ class ValidatesEmailVeracityOf #:nodoc:
        rescue Timeout::Error
         nil
       end
+      
+    private
+
+    def resolv_config
+      Resolv::DNS::Config.default_config_hash.merge(
+        :search => []
+      )
+    end
   end
 
 

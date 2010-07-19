@@ -43,6 +43,22 @@ class ValidatesEmailVeracityOfTest < Test::Unit::TestCase
     end
   end
 
+  def test_email_address_with_wildcard_search_domain
+    Resolv::DNS::Config.expects(:default_config_hash).at_least_once.returns(
+      :nameserver => ['8.8.8.8'], # Google public DNS
+      :search => ['shopify.com'],
+        # or sf.net, or any wildcard domain -- see http://en.wikipedia.org/wiki/Wildcard_DNS_record
+      :ndots => 1
+    )
+
+    nonexistant_addresses.each do |email|
+      assert Email.new(:address => "#{email}.shopify.com").valid?, 'Should validate.'
+    end
+    nonexistant_addresses.each do |email|
+      assert !Email.new(:address => email).valid?, 'Should not validate.'
+    end
+  end
+
   def test_blank_email_addresses
     assert Email.new(:address => '').valid?, 'Should pass validation.'
   end
